@@ -28,11 +28,12 @@
       OVERRIDE_HOME: "{{ selenoid_config_dir }}"
       DOCKER_API_VERSION: "{{ selenoid_docker_api_version }}"
     command: >
-      selenoid start
+      selenoid start --vnc
         --version {{ selenoid_version }}
         --tmpfs {{ selenoid_tmpfs }}
         --env DOCKER_API_VERSION={{ selenoid_docker_api_version }}
-        --browsers {% for browser in selenoid_browsers -%}{{ browser }}{%- if not loop.last -%},{%- endif -%}{%- endfor %}
+        --browsers {% for browser in selenoid_browsers -%}'{{ browser }}'{%- if not loop.last -%};{%- endif -%}{%- endfor %}
         --last-versions {{ selenoid_browsers_last_versions }}
-        --force
-        --args "-limit {{ selenoid_limit }} -listen :{{ selenoid_listen_port }}"
+        --force 
+        --port {{ selenoid_listen_port }}
+        --args "-limit {{ selenoid_limit }}"
